@@ -24,5 +24,15 @@ namespace OPoker
         {
             InitializeComponent();
         }
+
+        private void JoinHandler(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CreateHandler(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -6,7 +6,26 @@
         xmlns:local="clr-namespace:OPoker"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" Background="#333">
-    <Grid>
-        
+    <Window.Resources>
+        <Style x:Key="MainTitle" TargetType = "TextBlock">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#ddd"/>
+            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
+        <Style x:Key="MajorButton" TargetType="Button">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Margin" Value="150 20"/>
+        </Style>
+    </Window.Resources>
+    <Grid Width="790" HorizontalAlignment="Center">
+        <TextBlock Text="OPoker" Style="{StaticResource MainTitle}"/>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0 96 0 0">
+            <Button Style="{StaticResource MajorButton}" Content="Join" Click="JoinHandler"/>
+            <Button Style="{StaticResource MajorButton}" Content="Create" Click="CreateHandler"/>
+        </StackPanel>
     </Grid>
 </Window>
