@@ -25,14 +25,30 @@ namespace OPoker
             InitializeComponent();
         }
 
-        private void JoinHandler(object sender, RoutedEventArgs e)
+        private void BtnJoin_Click(object sender, RoutedEventArgs e)
+        {
+            InputBox.Visibility = Visibility.Visible;
+        }
+
+        private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void CreateHandler(object sender, RoutedEventArgs e)
-        {
-
+        private void BtnGo_Click(object sender, RoutedEventArgs e) {
+            string room_id = InputTextBox.Text;
+            if (IsValidRoomId(room_id))
+            {
+                JoinRoom(room_id);
+            }
+            InputBox.Visibility = Visibility.Collapsed;
         }
+
+        private bool IsValidRoomId(string room_id)
+        {
+            return true;
+        }
+
+        private void JoinRoom(string room_id) { }
     }
 }

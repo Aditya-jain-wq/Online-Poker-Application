@@ -22,10 +22,29 @@
         </Style>
     </Window.Resources>
     <Grid Width="790" HorizontalAlignment="Center">
-        <TextBlock Text="OPoker" Style="{StaticResource MainTitle}"/>
+        <TextBlock Name="textBox1" Text="OPoker" Style="{StaticResource MainTitle}"/>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0 96 0 0">
-            <Button Style="{StaticResource MajorButton}" Content="Join" Click="JoinHandler"/>
-            <Button Style="{StaticResource MajorButton}" Content="Create" Click="CreateHandler"/>
+            <Button Style="{StaticResource MajorButton}" Content="Join" Click="BtnJoin_Click"/>
+            <Button Style="{StaticResource MajorButton}" Content="Create" Click="BtnCreate_Click"/>
         </StackPanel>
+
+        <!-- It's important that this is in the end of the XAML as it needs to be on top of everything else! -->
+        <Grid x:Name="InputBox" Visibility="Collapsed">
+            <Grid Background="Black" Opacity="0.5"/>
+            <Border
+            MinWidth="250"
+            Background="Orange" 
+            BorderBrush="Black" 
+            BorderThickness="1" 
+            CornerRadius="0,55,0,55" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Margin="5" Text="Enter the Room ID" FontWeight="Bold" FontFamily="Cambria" FontSize="26"/>
+                    <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" Name="InputTextBox" FontSize="28"/>
+                    <Button Name="GoBtn" Padding="15" FontSize="20" Content="Yes" Background="{x:Null}" Click="BtnGo_Click"/>
+                    </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>
