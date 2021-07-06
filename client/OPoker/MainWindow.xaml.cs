@@ -13,42 +13,34 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OPoker
-{
+namespace OPoker {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
+    public partial class MainWindow : Window {
+        public MainWindow() {
             InitializeComponent();
         }
 
-        private void BtnJoin_Click(object sender, RoutedEventArgs e)
-        {
+        private void BtnJoin_Click(object sender, RoutedEventArgs e) {
             InputBox.Visibility = Visibility.Visible;
         }
 
-        private void BtnCreate_Click(object sender, RoutedEventArgs e)
-        {
+        private void BtnCreate_Click(object sender, RoutedEventArgs e) {
 
         }
 
         private void BtnGo_Click(object sender, RoutedEventArgs e) {
             string room_id = InputTextBox.Text;
-            if (IsValidRoomId(room_id))
-            {
-                JoinRoom(room_id);
+            try {
+                var id = new RoomId(room_id);
+                JoinRoom(id);
+                InputBox.Visibility = Visibility.Collapsed;
+            } catch (Exception) {
+
             }
-            InputBox.Visibility = Visibility.Collapsed;
         }
 
-        private bool IsValidRoomId(string room_id)
-        {
-            return true;
-        }
-
-        private void JoinRoom(string room_id) { }
+        private void JoinRoom(RoomId room_id) { throw new NotImplementedException(); }
     }
 }
