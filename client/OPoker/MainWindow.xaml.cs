@@ -18,7 +18,19 @@ namespace OPoker {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+
+        private TCPClient Client;
+        private Room _MyRoom;
+
+        public Room MyRoom{ 
+            get { return _MyRoom; }
+            set { _MyRoom = value; OnPropertyChanged("MyRoom"); }
+        };
+
         public MainWindow() {
+            Client = new TCPClient();
+            this.Title = "OPoker";
+            MyRoom = new Room();
             InitializeComponent();
         }
 
@@ -27,20 +39,40 @@ namespace OPoker {
         }
 
         private void BtnCreate_Click(object sender, RoutedEventArgs e) {
-
+            try {
+                Client.CreateRoom(); // call OnRoomUpdate in this
+                RoomBlock.Text = "Room ID";
+                InputTextBox = MyRoom.room_id;
+                InputBox.Visibility = Visibility.Visible;
+                BtnGo.Visibility = Visibility.Collapsed;
+                InitBtn.Visibility = Visibility.Collapsed;
+                MainView.Visibility = Visibility.Visible;
+            }
+            catch (Exception e) {
+                throw e;
+            }
         }
 
         private void BtnGo_Click(object sender, RoutedEventArgs e) {
             string room_id = InputTextBox.Text;
             try {
-                var id = new RoomId(room_id);
-                JoinRoom(id);
-                InputBox.Visibility = Visibility.Collapsed;
-            } catch (Exception) {
-
+                Client.JoinRoom(id); // call OnRoomUpdate in this
+                RoomBlock.Text = "Room ID";
+                InputTextBox = MyRoom.room_id;
+                BtnGo.Visibility = Visibility.Collapsed;
+                InitBtn.Visibility = Visibility.Collapsed;
+                MainView.Visibility = Visibility.Visible;
+            }
+            catch (Exception e) {
+                throw e;
             }
         }
 
-        private void JoinRoom(RoomId room_id) { throw new NotImplementedException(); }
+        public void OnRoomUpdate(Room room){
+            MyRoom = room;
+        }
+        
+        
+        
     }
 }
