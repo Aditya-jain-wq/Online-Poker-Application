@@ -9,6 +9,7 @@ class Server:
 	def __init__ (self, port):
 		self.thread = None
 		self.port = int(port)
+		self.conn_sock = set()
 
 	def start(self):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -70,8 +71,8 @@ class Server:
 					pass
 
 
-	def onConnect(self):
-		pass
+	def onConnect(self, sock):
+		self.conn_sock.add(sock)
 
 	def onDisconnect(self):
 		pass
