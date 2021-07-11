@@ -21,11 +21,37 @@ namespace OPoker {
 
         private TCPClient Client;
         private Room _MyRoom;
+        private Image _Card1;
+        private Image _Card2;
+        private Image _Card3;
+        private Image _Card4;
+        private Image _Card5;
 
         public Room MyRoom{ 
             get { return _MyRoom; }
             set { _MyRoom = value; OnPropertyChanged("MyRoom"); }
-        };
+        }
+        public Image Card1{
+            get { return _Card1; }
+            set { _Card1 = value; OnPropertyChanged("Card1"); }
+        }
+        public Image Card2{
+            get { return _Card2; }
+            set { _Card2 = value; OnPropertyChanged("Card2"); }
+        }
+        public Image Card3{
+            get { return _Card3; }
+            set { _Card3 = value; OnPropertyChanged("Card3"); }
+        }
+        public Image Card4{
+            get { return _Card4; }
+            set { _Card4 = value; OnPropertyChanged("Card4"); }
+        }
+        public Image Card5{
+            get { return _Card5; }
+            set { _Card5 = value; OnPropertyChanged("Card5"); }
+        }
+        
 
         public MainWindow() {
             Client = new TCPClient();
