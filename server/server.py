@@ -1,4 +1,3 @@
-# from socketserver import TCPServer, BaseRequestHandler
 import socket
 import selectors
 import json
@@ -9,6 +8,7 @@ from room import Room, MAX_PLAYERS_IN_GAME as MPIG
 
 
 def get_random_room(rooms) -> str:
+    """Return a room id that is not present in rooms"""
     pass
 
 
@@ -34,22 +34,25 @@ class PokerServer:
         username = payload["username"]
         kind = payload["kind"]
         payload = payload["payload"]
+        room: Room
         if kind == "JOIN":
-            cmd = JoinCmd(payload)
+            cmd = JoinCmd(**payload)
             assert self.players[conn] == ""
             assert cmd.room in self.rooms
             assert len(self.rooms[cmd.room].players) < MPIG
             assert not self.rooms[cmd.room].started
             self.rooms[cmd.room].players.append((conn, username))
             self.players[conn] = cmd.room
+            room = self.rooms[cmd.room]
         elif payload["kind"] == "CREATE":
-            cmd = CreateCmd(payload)
+            cmd = CreateCmd(**payload)
             assert self.players[conn] == ""
             new_room = get_random_room(self.rooms.keys())
             new_state = Room()
             new_state.players.append((conn, username))
             self.rooms[new_room] = new_state
             self.players[conn] = new_room
+            room = self.rooms[cmd.room]
         else:
             cmd = {
                 "RAISE": RaiseCmd,
@@ -58,13 +61,15 @@ class PokerServer:
             cmd = cmd(**payload)
             room = cmd.room
             self.rooms[room] = self.rooms[room].update(cmd)
-            # self.request.sendall(self.rooms[room] )
-        # self.request.sendall(self.data.upper())
+            room = self.rooms[cmd.room]
+        for (pl, _) in room.players:
+            pl.send(room.to_json())
 
     def handle(self, conn):
         try:
             self._handle(conn)
         except Exception as e:
+            # return an error message based on the exception
             pass
 
     def serve(self):
@@ -75,39 +80,8 @@ class PokerServer:
                 callback(key.fileobj)
 
 
-# class PokerHandler(BaseRequestHandler):
-#     def __init__(self, rooms: Dict[str, Room]):
-#         self.rooms = rooms
-
-#     def handle(self):
-#         self.data = self.request.recv(16192).strip()
-#         payload = json.loads(self.data)
-#         if payload["kind"] == "JOIN":
-#             cmd = JoinCmd(payload["payload"])
-#             assert (
-#                 len(self.rooms[cmd.room].players) < MPIG
-#                 and not self.rooms[cmd.room].started
-#             )
-#             self.rooms[cmd.room].players.append((self.client_address, cmd.username))
-#         elif payload["kind"] == "CREATE":
-#             cmd = CreateCmd(payload["payload"])
-#             pass
-#         else:
-#             cmd = {
-#                 "RAISE": RaiseCmd,
-#                 "FOLD": FoldCmd,
-#             }[payload["kind"]]
-#             cmd = cmd(**payload["cmd"])
-#             room = cmd.room
-#             self.rooms[room] = self.rooms[room].update(cmd)
-#             # self.request.sendall(self.rooms[room])
-#         # self.request.sendall(self.data.upper())
-
-
 if __name__ == "__main__":
     PORT = 12345
 
     server = PokerServer("", PORT)
     server.serve()
-    # with TCPServer(("", PORT), PokerHandler(rooms)) as server:
-    #     server.serve_forever()
