@@ -39,31 +39,32 @@ class PokerServer:
             cmd = JoinCmd(**payload)
             assert self.players[conn] == ""
             assert cmd.room in self.rooms
-            assert len(self.rooms[cmd.room].players) < MPIG
-            assert not self.rooms[cmd.room].started
-            self.rooms[cmd.room].players.append((conn, username))
-            self.players[conn] = cmd.room
             room = self.rooms[cmd.room]
+            assert len(room.players) < MPIG
+            assert not room.started
+            room.add_player(conn, username)
+            self.players[conn] = cmd.room
         elif payload["kind"] == "CREATE":
             cmd = CreateCmd(**payload)
             assert self.players[conn] == ""
             new_room = get_random_room(self.rooms.keys())
-            new_state = Room()
-            new_state.players.append((conn, username))
+            new_state = Room(cmd.default_amt)
+            new_state.add_player(conn, username)
             self.rooms[new_room] = new_state
             self.players[conn] = new_room
-            room = self.rooms[cmd.room]
+            room = new_state
         else:
             cmd = {
+                "START": StartCmd,
                 "RAISE": RaiseCmd,
                 "FOLD": FoldCmd,
             }[kind]
             cmd = cmd(**payload)
             room = cmd.room
-            self.rooms[room] = self.rooms[room].update(cmd)
+            self.rooms[room].update(cmd)
             room = self.rooms[cmd.room]
-        for (pl, _) in room.players:
-            pl.send(room.to_json())
+        for pl in room.players:
+            pl.send(room)
 
     def handle(self, conn):
         try:

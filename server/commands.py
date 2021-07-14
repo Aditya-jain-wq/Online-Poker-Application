@@ -1,14 +1,31 @@
+from dataclasses import dataclass
+from typing import Protocol
+
+
+class Command(Protocol):
+    pass
+
+
+@dataclass
 class JoinCmd:
-    pass
+    room: str
 
 
+@dataclass
 class CreateCmd:
-    pass
+    default_amt: int
 
 
+@dataclass
 class RaiseCmd:
     pass
 
 
+@dataclass
 class FoldCmd:
+    pass
+
+
+@dataclass
+class StartCmd:
     pass
