@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OPoker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Background="#333" WindowState="Maximized">
+        Title="MainWindow" Height="600" Width="800" Background="#333" WindowState="Maximized">
     <Window.Resources>
         <Style x:Key="MainTitle" TargetType = "TextBlock">
             <Setter Property="VerticalAlignment" Value="Top"/>
@@ -28,7 +28,7 @@
             <Button Style="{StaticResource MajorButton}" Content="Create" Click="BtnCreate_Click"/>
         </StackPanel>
 
-        <Grid Name="MainView" Visibility="Collapsed" Height="Auto" Width="Auto">
+        <Grid Name="MainView" Visibility="Visible" Height="Auto" Width="Auto">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBox Margin="20" Height="20" Width="30" Text="{Binding MyRoom.Player1}"/>
@@ -37,7 +37,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBox Margin="20" Height="20" Width="30" Text="{Binding MyRoom.Player4}"/>
-                    <Grid Name="Table" Margin="100" Height="200" Width="300">
+                    <Grid Name="Table" Margin="100" Height="200" Width="350">
                         <StackPanel>
                             <TextBlock Text="Pot: $0" Margin="10"/>
                             <StackPanel Orientation="Horizontal">
@@ -74,7 +74,7 @@
                 <StackPanel>
                     <TextBlock x:Name="RoomBlock" Margin="5" Text="Enter the Room ID" FontWeight="Bold" FontFamily="Cambria" FontSize="26"/>
                     <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" Name="InputTextBox" FontSize="28"/>
-                    <Button Name="BtnGo" Name="GoBtn" Padding="15" FontSize="20" Content="Yes" Background="{x:Null}" Click="BtnGo_Click"/>
+                    <Button Name="BtnGo" Padding="15" FontSize="20" Content="Yes" Background="{x:Null}" Click="BtnGo_Click"/>
                 </StackPanel>
             </Border>
         </Grid>
