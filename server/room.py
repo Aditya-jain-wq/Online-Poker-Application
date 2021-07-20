@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, List
 
 from commands import Command
@@ -10,7 +10,7 @@ class Player:
     conn: Any
     username: str
     money: int
-    cards: List[str] = []
+    cards: List[str] = field(default_factory=list)
 
     def send(room: "Room"):
         pass
@@ -19,8 +19,8 @@ class Player:
 @dataclass
 class Room:
     default_amt: int
-    dealer_cards: List[str] = []
-    players: List[Player] = []
+    dealer_cards: List[str] = field(default_factory=list)
+    players: List[Player] = field(default_factory=list)
     pot: int = 0
     started: bool = False
 
