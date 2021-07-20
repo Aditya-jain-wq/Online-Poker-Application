@@ -1,9 +1,11 @@
 from dataclasses import dataclass
+from server.room import Player, Room
 from typing import Protocol
 
 
 class Command(Protocol):
-    pass
+    def update(self, room: Room):
+        ...
 
 
 @dataclass
@@ -18,14 +20,33 @@ class CreateCmd:
 
 @dataclass
 class RaiseCmd:
-    pass
+    amt: int  # amount that player is adding to the pot this turn
+    user: str
+
+    def update(self, room: Room):
+        player: Player
+        for pl in room.players:
+            if pl.username == self.user:
+                player = pl
+        assert player.money >= self.amt + player.put_in_pot
+        player.put_in_pot += self.amt
+        if len(
+            pl for pl in room.players if pl.put_in_pot == room.players[0].put_in_pot
+        ) == len(room.players):
+            room.play_dealer()
 
 
 @dataclass
 class FoldCmd:
-    pass
+    user: str
+
+    def update(self, room: Room):
+        player = [pl for pl in room.players if pl.username == self.user][0]
+        player.is_live = False
 
 
 @dataclass
 class StartCmd:
-    pass
+    def update(self, room: Room):
+        assert not room.started
+        room.started = True

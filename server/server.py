@@ -42,9 +42,10 @@ class PokerServer:
             room = self.rooms[cmd.room]
             assert len(room.players) < MPIG
             assert not room.started
+            assert len(pl for pl in room.players if pl.username == username) == 0
             room.add_player(conn, username)
             self.players[conn] = cmd.room
-        elif payload["kind"] == "CREATE":
+        elif kind == "CREATE":
             cmd = CreateCmd(**payload)
             assert self.players[conn] == ""
             new_room = get_random_room(self.rooms.keys())
@@ -71,7 +72,7 @@ class PokerServer:
             self._handle(conn)
         except Exception as e:
             # return an error message based on the exception
-            pass
+            conn.send(e)
 
     def serve(self):
         while True:

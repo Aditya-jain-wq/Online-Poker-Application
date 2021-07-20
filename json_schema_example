@@ -1,0 +1,28 @@
+{
+  "room_id": "ABD345",
+  "pot_amt": 100,
+  "dealer_cards": [ "D4", "H6", "CJ", "XX", "" ],
+  "players": [
+    {
+      "username": "DickSucker",
+      "pot_contrib": 69,
+      "total_money": 100,
+      "cards": [ "D6", "H7" ],
+      "is_live": true,
+      "is_turn_now": false,
+    },
+    { ... },
+    null,
+    null,
+    ...
+  ]
+}
+====================
+{
+  "kind": "RAISE",
+  "payload": {
+    "amt": 567,
+    "room": "DBF456",
+    "username": "dka"
+  }
+}
