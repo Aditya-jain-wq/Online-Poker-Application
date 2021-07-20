@@ -85,4 +85,5 @@ if __name__ == "__main__":
     PORT = 12345
 
     server = PokerServer("", PORT)
+    print("Starting server...")
     server.serve()
