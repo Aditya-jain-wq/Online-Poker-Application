@@ -108,7 +108,7 @@ namespace OPoker {
                 }
             }
         }
-
+        
         public void OnRoomUpdate(Room room) {
             MyRoom = room;
         }

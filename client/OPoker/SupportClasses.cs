@@ -33,14 +33,22 @@ namespace OPoker {
 
     public class Room : INotifyPropertyChanged {
         public string room_id;
-        Player Player1;
-        Player Player2;
-        Player Player4;
-        Player Player5;
-        Player Player3;
-        Player Player6;
-        Player Player7;
-        Player Player8;
+        public Player Player1;
+        public Player Player2;
+        public Player Player3;
+        public Player Player4;
+        public Player Player5;
+        public Player Player6;
+        public Player Player7;
+        public Player Player8;
+        private int _pot_amt;
+
+        public int pot_amt {
+            get => return _pot_amt;
+            set { _pot_amt = value; OnPropertyChanged(pot_amt); }
+        }
+
+        public string[] dealer_cards;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyname) {
@@ -63,6 +71,11 @@ namespace OPoker {
     public class Player : INotifyPropertyChanged {
         private string _username;
         private int _rem_money; // remaining money
+
+        public int pot_contrib;
+        public string[] cards;
+        public bool is_live;
+        public bool is_turn_now;
         
         public string username{
             get { return _username; }
@@ -83,4 +96,10 @@ namespace OPoker {
             rem_money = 100;
         }
     }
+
+    public class Command {
+        public string kind;
+        
+    }
+    
 }

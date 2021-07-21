@@ -34,30 +34,30 @@
         <Grid Name="MainView" Visibility="Collapsed" Height="Auto" Width="Auto" Grid.Column="0" Margin="0 100 0 0">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player1}"/>
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player2}"/>
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player3}"/>
+                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player1.username}"/>
+                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player2.username}"/>
+                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player3.username}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player4}"/>
+                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player4.username}"/>
                     <Grid Name="Table" Margin="100" Height="200" Width="350">
                         <StackPanel>
-                            <TextBlock Text="Pot: $0" Margin="10"/>
+                            <TextBlock Text="Pot: $0" Margin="10" HorizontalAlignment="Center"/>
                             <StackPanel Orientation="Horizontal">
-                                <Image Margin="10, 10" Height="75" Width="50" Source="{Binding Card2}"/>
-                                <Image Margin="10, 10" Height="75" Width="50" Source="{Binding Card1}"/>
-                                <Image Margin="10, 10" Height="75" Width="50" Source="{Binding Card3}"/>
-                                <Image Margin="10, 10" Height="75" Width="50" Source="{Binding Card4}"/>
-                                <Image Margin="10, 10" Height="75" Width="50" Source="{Binding Card5}"/>
+                                <Image Margin="10, 10" Source="{Binding Card1}"/>
+                                <Image Margin="10, 10" Source="{Binding Card2}"/>
+                                <Image Margin="10, 10" Source="{Binding Card3}"/>
+                                <Image Margin="10, 10" Source="{Binding Card4}"/>
+                                <Image Margin="10, 10" Source="{Binding Card5}"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
-                    <TextBox Margin="20" Height="20" Width="30" Text="{Binding MyRoom.Player5}"/>
+                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player5.username}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBox Margin="20" Height="20" Width="30" Text="{Binding MyRoom.Player6}"/>
-                    <TextBox Margin="20" Height="20" Width="30" Text="{Binding MyRoom.Player7}"/>
-                    <TextBox Margin="20" Height="20" Width="30" Text="{Binding MyRoom.Player8}"/>
+                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player6.username}"/>
+                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player7.username}"/>
+                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player8.username}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
