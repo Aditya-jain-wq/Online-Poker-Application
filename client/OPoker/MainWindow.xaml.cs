@@ -27,6 +27,8 @@ namespace OPoker {
         private Image _Card3;
         private Image _Card4;
         private Image _Card5;
+        private string username = "";
+        private string room_id = "";
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -62,40 +64,48 @@ namespace OPoker {
 
         public MainWindow() {
             Client = new MyTcpClient();
-            Title = "OPoker";
             MyRoom = new Room();
             InitializeComponent();
         }
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e) {
-            InputBox.Visibility = Visibility.Visible;
-        }
-
-        private void BtnCreate_Click(object sender, RoutedEventArgs e) {
-            try {
-                Client.CreateRoom(); // call OnRoomUpdate in this
-                RoomBlock.Text = "Room ID";
-                InputTextBox.Text = MyRoom.room_id;
-                InputBox.Visibility = Visibility.Visible;
-                BtnGo.Visibility = Visibility.Collapsed;
-                InitBtn.Visibility = Visibility.Collapsed;
-                MainView.Visibility = Visibility.Visible;
-            } catch (Exception ex) {
-                throw ex;
+            if(String.IsNullorEmpty(UsernameInput.Text)) {
+                Username.Text = "User Name is Empty. Enter your User Name below";
+            }
+            else if(String.IsNullorEmpty(RoomidInput.Text)) {
+                RoomBlock.Text = "Room ID is Empty. Enter the Room ID below";
+            }
+            else {
+                username = UsernameInput.Text;
+                room_id = RoomidInput.Text;
+                MyRoom = Client.JoinRoom(username, room_id)
+                if( MyRoom is null ) {
+                    RoomBlock.Text = "Room ID is not valid. Enter the valid Room ID below";
+                }
+                else{
+                    ButtonOptions.Visibility = Visibility.Collapsed;
+                    MainView.Visibility = Visibility.Visible;
+                }
             }
         }
 
-        private void BtnGo_Click(object sender, RoutedEventArgs e) {
-            string room_id = InputTextBox.Text;
-            try {
-                Client.JoinRoom(room_id); // call OnRoomUpdate in this
-                RoomBlock.Text = "Room ID";
-                InputTextBox.Text = MyRoom.room_id;
-                BtnGo.Visibility = Visibility.Collapsed;
-                InitBtn.Visibility = Visibility.Collapsed;
-                MainView.Visibility = Visibility.Visible;
-            } catch (Exception ex) {
-                throw ex;
+        private void BtnCreate_Click(object sender, RoutedEventArgs e) {
+            if(String.IsNullorEmpty(UsernameInput.Text)) {
+                Username.Text = "User Name is Empty. Enter your User Name below";
+            }
+            else {
+                username = UsernameInput.Text;
+                MyRoom = Client.CreateRoom(username);
+                if( MyRoom is null ) {
+                    Trace.WriteLine("MyRoom is Null, BtnCreate_Click.MainWindow");
+                }
+                else{
+                    room_id = MyRoom.room_id;
+                    RoomBlock.Text = "Your shareable Room ID is";
+                    RoomidInput.Text = room_id;
+                    ButtonOptions.Visibility = Visibility.Collapsed;
+                    MainView.Visibility = Visibility.Visible;
+                }
             }
         }
 

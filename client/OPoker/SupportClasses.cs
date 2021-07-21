@@ -34,45 +34,53 @@ namespace OPoker {
     public class Room : INotifyPropertyChanged {
         public string room_id;
         Player Player1;
-        string Player2;
-        string Player3;
-        string Player4;
-        string Player5;
-        string Player6;
-        string Player7;
-        string Player8;
+        Player Player2;
+        Player Player4;
+        Player Player5;
+        Player Player3;
+        Player Player6;
+        Player Player7;
+        Player Player8;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyname) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
-        }
-
-        public string Pl1 {
-            get => Player1.username;
-            set => Player1.username = value;
         }
 
         public Room() {
             room_id = "";
             Player1 = null;
-            Player2 = "";
-            Player3 = "";
-            Player4 = "";
-            Player5 = "";
-            Player6 = "";
-            Player7 = "";
-            Player8 = "";
+            Player2 = null;
+            Player3 = null;
+            Player4 = null;
+            Player5 = null;
+            Player6 = null;
+            Player7 = null;
+            Player8 = null;
         }
     }
     
     public class Player : INotifyPropertyChanged {
-        public string username;
-        public int rem_money;
+        private string _username;
+        private int _rem_money; // remaining money
+        
+        public string username{
+            get { return _username; }
+            set { _username = value; OnPropertyChanged("username")}
+        };
+        public int rem_money{
+            get { return _rem_money; }
+            set { _rem_money = value; OnPropertyChanged("rem_money")}
+        };
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyname) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+        }
+        public Player(){
+            username = "";
+            rem_money = 100;
         }
     }
 }
