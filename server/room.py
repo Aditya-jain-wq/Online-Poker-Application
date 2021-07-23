@@ -26,17 +26,24 @@ class CardDeck:
         "C",
         "S",
     ]
+    DECK_VALUE = ["A", *(str(i) for i in range(2, 11)), "J", "Q", "K"]
 
     def __init__(self) -> None:
         self.cards = [False for _ in range(52)]
 
     @staticmethod
-    def idx_to_card(idx: int) -> str:
+    def idx_to_card(card: int) -> str:
         "DECK_NUMBER"
-        pass
+        deck = CardDeck.DECK_LETTER[card // 13]
+        val = CardDeck.DECK_VALUE[card % 13]
+        return f"{deck}{val}"
 
     def get_new_card(self) -> str:
-        pass
+        import random
+
+        card = random.choice([i for i, j in enumerate(self.cards) if not j])
+        self.cards[card] = True
+        return self.idx_to_card(card)
 
 
 @dataclass
