@@ -1,10 +1,12 @@
 from dataclasses import dataclass
-from server.room import Player, Room
-from typing import Protocol
+from typing import Protocol, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from server.room import Player, Room
 
 
 class Command(Protocol):
-    def update(self, room: Room):
+    def update(self, room: "Room"):
         ...
 
 
@@ -23,8 +25,8 @@ class RaiseCmd:
     amt: int  # amount that player is adding to the pot this turn
     user: str
 
-    def update(self, room: Room):
-        player: Player
+    def update(self, room: "Room"):
+        player: "Player"
         for pl in room.players:
             if pl.username == self.user:
                 player = pl
@@ -40,13 +42,13 @@ class RaiseCmd:
 class FoldCmd:
     user: str
 
-    def update(self, room: Room):
+    def update(self, room: "Room"):
         player = [pl for pl in room.players if pl.username == self.user][0]
         player.is_live = False
 
 
 @dataclass
 class StartCmd:
-    def update(self, room: Room):
+    def update(self, room: "Room"):
         assert not room.started
         room.started = True
