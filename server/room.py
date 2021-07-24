@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+import json
 from typing import Any, List
 
 from commands import Command
@@ -15,8 +16,29 @@ class Player:
     is_live: bool = True
     cards: List[str] = field(default_factory=list)
 
-    def send(room: "Room"):
-        pass
+    def send(self, room: "Room"):
+        from itertools import chain, repeat, islice
+
+        data = {
+            "room_id": room.id_,
+            "pot_amt": room.pot,
+            "dealer_cards": [*islice(chain(room.dealer_cards, repeat("")), 5)],
+            "players": [
+                {
+                    "username": pl.username,
+                    "pot_contrib": pl.put_in_pot,
+                    "total_money": pl.money,
+                    "cards": pl.cards if pl.username == self.username else ["XX", "XX"],
+                    "is_live": pl.is_live,
+                    "is_turn_now": False,
+                }
+                for pl in room.players
+            ],
+        }
+        data["players"] = list(islice(chain(data["players"], repeat(None)), 8))
+        data["players"][room.player_this_turn]["is_turn_now"] = True
+        json_data = json.dumps(data)
+        self.conn.send(json_data)
 
 
 class CardDeck:
