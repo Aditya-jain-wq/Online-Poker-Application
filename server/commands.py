@@ -50,5 +50,5 @@ class FoldCmd:
 @dataclass
 class StartCmd:
     def update(self, room: "Room"):
-        assert not room.started
-        room.started = True
+        assert not room.is_started
+        room.is_started = True

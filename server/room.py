@@ -36,7 +36,8 @@ class Player:
             ],
         }
         data["players"] = list(islice(chain(data["players"], repeat(None)), 8))
-        data["players"][room.player_this_turn]["is_turn_now"] = True
+        if room.is_started:
+            data["players"][room.player_this_turn]["is_turn_now"] = True
         json_data = json.dumps(data)
         self.conn.send(json_data)
 
@@ -76,7 +77,7 @@ class Room:
     dealer_cards: List[str] = field(default_factory=list)
     players: List[Player] = field(default_factory=list)
     pot: int = 0
-    started: bool = False
+    is_started: bool = False
     card_deck: CardDeck = field(default_factory=CardDeck)
 
     def add_player(self, conn: Any, username: str):
