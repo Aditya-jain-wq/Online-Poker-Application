@@ -11,7 +11,7 @@ class Command(Protocol):
 
 
 @dataclass
-class RaiseCmd:
+class BetCmd:
     amt: int  # amount that player is adding to the pot this turn
     user: str
 

@@ -53,7 +53,7 @@ class PokerServer:
         else:
             cmd = {
                 "START": StartCmd,
-                "RAISE": RaiseCmd,
+                "BET": BetCmd,
                 "FOLD": FoldCmd,
             }[kind]
             cmd = cmd(**payload)
