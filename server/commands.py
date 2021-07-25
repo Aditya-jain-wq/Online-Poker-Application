@@ -11,16 +11,6 @@ class Command(Protocol):
 
 
 @dataclass
-class JoinCmd:
-    room: str
-
-
-@dataclass
-class CreateCmd:
-    default_amt: int
-
-
-@dataclass
 class RaiseCmd:
     amt: int  # amount that player is adding to the pot this turn
     user: str
