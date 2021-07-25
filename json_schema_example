@@ -20,9 +20,16 @@
 ====================
 {
   "kind": "RAISE",
+  "username": "dka"
+  "room": "DBF456",
   "payload": {
     "amt": 567,
-    "room": "DBF456",
-    "username": "dka"
   }
+}
+
+{
+  "kind": "CREATE",
+  "username": "kda",
+  "room": "",
+  "payload": {}
 }

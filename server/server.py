@@ -31,25 +31,21 @@ class PokerServer:
     def _handle(self, conn):
         data = conn.recv(16192).strip()
         payload = json.loads(data)
-        username = payload["username"]
         kind = payload["kind"]
+        username = payload["username"]
+        room_id = payload["room"]
         payload = payload["payload"]
         room: Room
         if kind == "JOIN":
-            cmd = JoinCmd(**payload)
             assert self.players[conn] == ""
-            assert cmd.room in self.rooms
-            room = self.rooms[cmd.room]
-            assert len(room.players) < MPIG
-            assert not room.started
-            assert len(pl for pl in room.players if pl.username == username) == 0
+            assert room_id in self.rooms
+            room = self.rooms[room_id]
             room.add_player(conn, username)
-            self.players[conn] = cmd.room
+            self.players[conn] = room_id
         elif kind == "CREATE":
-            cmd = CreateCmd(**payload)
             assert self.players[conn] == ""
             new_room = get_random_room(self.rooms.keys())
-            new_state = Room(cmd.default_amt)
+            new_state = Room(new_room)
             new_state.add_player(conn, username)
             self.rooms[new_room] = new_state
             self.players[conn] = new_room
@@ -61,9 +57,8 @@ class PokerServer:
                 "FOLD": FoldCmd,
             }[kind]
             cmd = cmd(**payload)
-            room = cmd.room
-            self.rooms[room].update(cmd)
-            room = self.rooms[cmd.room]
+            self.rooms[room_id].update(cmd)
+            room = self.rooms[room_id]
         for pl in room.players:
             pl.send(room)
 
@@ -71,7 +66,7 @@ class PokerServer:
         try:
             self._handle(conn)
         except Exception as e:
-            # return an error message based on the exception
+            ## TODO: return an error message based on the exception
             conn.send(e)
 
     def serve(self):

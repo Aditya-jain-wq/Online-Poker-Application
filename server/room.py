@@ -81,11 +81,11 @@ class Room:
     card_deck: CardDeck = field(default_factory=CardDeck)
 
     def add_player(self, conn: Any, username: str):
+        assert not self.started
+        assert len(self.players) < MAX_PLAYERS_IN_GAME
+        assert len(pl for pl in self.players if pl.username == username) == 0
         player = Player(conn, username, self.default_amt)
         self.players.append(player)
 
     def update(self, cmd: Command):
         cmd.update(self)
-
-    def play_dealer(self):
-        pass
