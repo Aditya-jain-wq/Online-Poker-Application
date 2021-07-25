@@ -44,12 +44,12 @@ class PokerServer:
             self.players[conn] = room_id
         elif kind == "CREATE":
             assert self.players[conn] == ""
-            new_room = get_random_room(self.rooms.keys())
-            new_state = Room(new_room)
-            new_state.add_player(conn, username)
-            self.rooms[new_room] = new_state
-            self.players[conn] = new_room
-            room = new_state
+            assert room_id == ""
+            room_id = get_random_room(self.rooms.keys())
+            room = Room(room_id)
+            room.add_player(conn, username)
+            self.rooms[room_id] = room
+            self.players[conn] = room_id
         else:
             cmd = {
                 "START": StartCmd,
@@ -57,7 +57,7 @@ class PokerServer:
                 "FOLD": FoldCmd,
             }[kind]
             cmd = cmd(**payload)
-            self.rooms[room_id].update(cmd)
+            self.rooms[room_id].update(cmd, username)
             room = self.rooms[room_id]
         for pl in room.players:
             pl.send(room)
