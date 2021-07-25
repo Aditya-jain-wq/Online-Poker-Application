@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 
 class Command(Protocol):
-    def update(self, room: "Room"):
+    def update(self, room: "Room", user: str):
         ...
 
 
@@ -49,6 +49,10 @@ class FoldCmd:
 
 @dataclass
 class StartCmd:
-    def update(self, room: "Room"):
+    def update(self, room: "Room", user: str):
         assert not room.is_started
+        assert len(room.players) >= 2
+        assert room.players[0].username == user
         room.is_started = True
+        for pl in room.players:
+            pl.cards = [room.card_deck.get_new_card(), room.card_deck.get_new_card()]
