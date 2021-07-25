@@ -80,6 +80,10 @@ class Room:
     is_started: bool = False
     card_deck: CardDeck = field(default_factory=CardDeck)
 
+    @property
+    def live_players(self):
+        return len(pl for pl in self.players if pl.is_live)
+
     def add_player(self, conn: Any, username: str):
         assert not self.started
         assert len(self.players) < MAX_PLAYERS_IN_GAME
@@ -87,5 +91,8 @@ class Room:
         player = Player(conn, username, self.default_amt)
         self.players.append(player)
 
-    def update(self, cmd: Command):
-        cmd.update(self)
+    def next_player(self):
+        pass
+
+    def update(self, cmd: Command, username: str):
+        cmd.update(self, username)
