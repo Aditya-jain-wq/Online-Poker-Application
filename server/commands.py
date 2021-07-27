@@ -30,11 +30,12 @@ class BetCmd:
 
 @dataclass
 class FoldCmd:
-    user: str
-
-    def update(self, room: "Room"):
-        player = [pl for pl in room.players if pl.username == self.user][0]
+    def update(self, room: "Room", user: str):
+        player = [pl for pl in room.players if pl.username == user][0]
         player.is_live = False
+        if room.live_players == 1:
+            live_player = [pl for pl in room.players if pl.is_live][0]
+            room.winner = live_player.username
 
 
 @dataclass
