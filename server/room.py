@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 import json
-from typing import Any, List
+from typing import Any, List, Optional
 
 from commands import Command
 
@@ -14,6 +14,7 @@ class Player:
     money: int
     put_in_pot: int = 0
     is_live: bool = True
+    last_bet: Optional[int] = None
     cards: List[str] = field(default_factory=list)
 
     def send(self, room: "Room"):
@@ -23,6 +24,7 @@ class Player:
             "room_id": room.id_,
             "pot_amt": room.pot,
             "dealer_cards": [*islice(chain(room.dealer_cards, repeat("")), 5)],
+            "winner": room.winner,
             "players": [
                 {
                     "username": pl.username,
@@ -72,6 +74,7 @@ class CardDeck:
 @dataclass
 class Room:
     id_: str
+    winner: str = ""
     player_this_turn: int = 0
     default_amt: int = 100
     dealer_cards: List[str] = field(default_factory=list)
@@ -92,7 +95,18 @@ class Room:
         self.players.append(player)
 
     def next_player(self):
+        self.player_this_turn = (self.player_this_turn + 1) % len(self.players)
+        while not self.players[self.player_this_turn].is_live:
+            self.player_this_turn = (self.player_this_turn + 1) % len(self.players)
+
+    ## TODO:
+    ## 1. set bet_amt to None
+    ## 2. choose new card
+    ## 3. set next player to first live
+    def play_dealer(self):
         pass
 
     def update(self, cmd: Command, username: str):
+        assert self.players[self.player_this_turn].username == username
         cmd.update(self, username)
+        self.next_player()

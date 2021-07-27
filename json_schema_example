@@ -1,7 +1,8 @@
 {
   "room_id": "ABD345",
   "pot_amt": 100,
-  "dealer_cards": [ "D4", "H6", "CJ", "XX", "" ],
+  "dealer_cards": [ "D4", "H6", "CJ", "", "" ],
+  "winner": "",
   "players": [
     {
       "username": "DickSucker",
@@ -19,8 +20,8 @@
 }
 ====================
 {
-  "kind": "RAISE",
-  "username": "dka"
+  "kind": "BET",
+  "username": "dka",
   "room": "DBF456",
   "payload": {
     "amt": 567,

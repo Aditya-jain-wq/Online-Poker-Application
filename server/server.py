@@ -61,6 +61,11 @@ class PokerServer:
             room = self.rooms[room_id]
         for pl in room.players:
             pl.send(room)
+        if room.winner != "":
+            for pl in room.players:
+                pl.conn.close()
+                del self.players[pl.conn]
+            del self.rooms[room_id]
 
     def handle(self, conn):
         try:
