@@ -36,23 +36,19 @@ namespace OPoker {
     }
 
     public class Room : INotifyPropertyChanged {
-        public string room_id;
-        public Player Player1;
-        public Player Player2;
-        public Player Player3;
-        public Player Player4;
-        public Player Player5;
-        public Player Player6;
-        public Player Player7;
-        public Player Player8;
+        private string _room_id;
         private int _pot_amt;
 
+        public string room_id { 
+            get => _room_id;
+            set { _room_id = value; OnPropertyChanged("room_id"); } 
+        }
         public int pot_amt {
             get => _pot_amt;
             set { _pot_amt = value; OnPropertyChanged("pot_amt"); }
         }
-
-        public string[] dealer_cards;
+        public Player[] Players { get; set; } = new Player[8];
+        public string[] dealer_cards { get; set; } = new string[5];
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyname) {
@@ -61,38 +57,31 @@ namespace OPoker {
 
         public Room() {
             room_id = "";
-            Player1 = null;
-            Player2 = null;
-            Player3 = null;
-            Player4 = null;
-            Player5 = null;
-            Player6 = null;
-            Player7 = null;
-            Player8 = null;
+            Pla
         }
     }
     
     public class Player : INotifyPropertyChanged {
         private string _username;
-        private int _rem_money; // remaining money
         private int _pot_contrib;
+        private int _total_money; // remaining money
 
-        public string[] cards;
-        public bool is_live;
-        public bool is_turn_now;
         
         public string username{
             get { return _username; }
             set { _username = value; OnPropertyChanged("username"); }
         }
-        public int rem_money{
-            get { return _rem_money; }
-            set { _rem_money = value; OnPropertyChanged("rem_money"); }
+        public int total_money{
+            get { return _total_money; }
+            set { _total_money = value; OnPropertyChanged("total_money"); }
         }
         public int pot_contrib{
             get { return _pot_contrib; }
             set { _pot_contrib = value; OnPropertyChanged("pot_contrib"); }
         }
+        public string[] cards { get; set; } = new string[2];
+        public bool is_live { get; set; }
+        public bool is_turn_now { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

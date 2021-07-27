@@ -23,11 +23,6 @@ namespace OPoker {
 
         private MyTcpClient Client;
         private Room _MyRoom;
-        private Image _Card1;
-        private Image _Card2;
-        private Image _Card3;
-        private Image _Card4;
-        private Image _Card5;
         private string username = "";
         private string room_id = "";
 
@@ -61,6 +56,7 @@ namespace OPoker {
             get => _Card5;
             set { _Card5 = value; OnPropertyChanged("Card5"); }
         }
+        public ObservableCollection<Image> Cards
         public int PlayerNo { get; set; }
 
 

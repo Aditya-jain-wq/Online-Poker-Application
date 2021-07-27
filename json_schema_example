@@ -1,7 +1,7 @@
 {
   "room_id": "ABD345",
-  "pot_amt": 100,
-  "dealer_cards": [ "D4", "H6", "CJ", "XX", "" ],
+  "pot_amt": 23,
+  "dealer_cards": [ "D4", "H6", "CJ", "XX", "XX" ],
   "players": [
     {
       "username": "DickSucker",
