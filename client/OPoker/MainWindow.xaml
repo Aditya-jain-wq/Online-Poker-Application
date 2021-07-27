@@ -39,11 +39,10 @@
         <TextBlock Text="Online Poker" VerticalAlignment="Top" HorizontalAlignment="Center" Height="100" Width="450" Grid.ColumnSpan="2" Style="{StaticResource MainTitle}"/>
         <Grid Name="MainView" Visibility="Visible" Height="Auto" Width="Auto" Grid.Column="0" Margin="0 100 0 0">
             <StackPanel>
-            
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <StackPanel Name="pl1" Margin="20">
                         <TextBlock Foreground="White">
-                            <Run Text="Your contrib $"/><Run Text="{Binding MyRoom.Player1.pot_contrib}"/>
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player1.pot_contrib}"/>
                         </TextBlock>
                         <StackPanel Orientation="Horizontal">
                             <Grid Style="{StaticResource Card}">
@@ -55,15 +54,62 @@
                         </StackPanel>
                         <TextBlock Text="{Binding MyRoom.Player1.username}" Foreground="White"/>
                         <TextBlock Foreground="White">
-                            <Run Text="Left with you $"/><Run Text="{Binding MyRoom.Player1.rem_money}"/>
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player1.rem_money}"/>
                         </TextBlock>
                     </StackPanel>
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player1.username}"/>
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player2.username}"/>
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player3.username}"/>
+                    <StackPanel Name="pl2" Margin="20">
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player2.pot_contrib}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player2Card1" Stretch="None"/>
+                            </Grid>
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player2Card2" Stretch="None"/>
+                            </Grid>
+                        </StackPanel>
+                        <TextBlock Text="{Binding MyRoom.Player2.username}" Foreground="White"/>
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player2.rem_money}"/>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Name="pl3" Margin="20">
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player3.pot_contrib}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player3Card1" Stretch="None"/>
+                            </Grid>
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player3Card2" Stretch="None"/>
+                            </Grid>
+                        </StackPanel>
+                        <TextBlock Text="{Binding MyRoom.Player3.username}" Foreground="White"/>
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player3.rem_money}"/>
+                        </TextBlock>
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player4.username}"/>
+                    <StackPanel Name="pl4" Margin="20">
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player4.pot_contrib}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player4Card1" Stretch="None"/>
+                            </Grid>
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player4Card2" Stretch="None"/>
+                            </Grid>
+                        </StackPanel>
+                        <TextBlock Text="{Binding MyRoom.Player4.username}" Foreground="White"/>
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player4.rem_money}"/>
+                        </TextBlock>
+                    </StackPanel>
                     <Grid Name="Table" Margin="100" MaxHeight="200" MaxWidth="350">
                         <StackPanel>
                             <TextBlock Text="Pot: $0" Margin="10" HorizontalAlignment="Center"/>
@@ -86,14 +132,77 @@
                             </StackPanel>
                         </StackPanel>
                     </Grid>
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player5.username}"/>
+                    <StackPanel Name="pl5" Margin="20">
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player5.pot_contrib}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player5Card1" Stretch="None"/>
+                            </Grid>
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player5Card2" Stretch="None"/>
+                            </Grid>
+                        </StackPanel>
+                        <TextBlock Text="{Binding MyRoom.Player5.username}" Foreground="White"/>
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player5.rem_money}"/>
+                        </TextBlock>
+                    </StackPanel>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player6.username}"/>
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player7.username}"/>
-                    <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player8.username}"/>
+                    <StackPanel Name="pl6" Margin="20">
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player6.pot_contrib}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player6Card1" Stretch="None"/>
+                            </Grid>
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player6Card2" Stretch="None"/>
+                            </Grid>
+                        </StackPanel>
+                        <TextBlock Text="{Binding MyRoom.Player6.username}" Foreground="White"/>
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player6.rem_money}"/>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Name="pl7" Margin="20">
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player7.pot_contrib}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player7Card1" Stretch="None"/>
+                            </Grid>
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player7Card2" Stretch="None"/>
+                            </Grid>
+                        </StackPanel>
+                        <TextBlock Text="{Binding MyRoom.Player7.username}" Foreground="White"/>
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player7.rem_money}"/>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Name="pl8" Margin="20">
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player8.pot_contrib}"/>
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player8Card1" Stretch="None"/>
+                            </Grid>
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player8Card2" Stretch="None"/>
+                            </Grid>
+                        </StackPanel>
+                        <TextBlock Text="{Binding MyRoom.Player8.username}" Foreground="White"/>
+                        <TextBlock Foreground="White">
+                            <Run Text="$"/><Run Text="{Binding MyRoom.Player8.rem_money}"/>
+                        </TextBlock>
+                    </StackPanel>
                 </StackPanel>
-            
             </StackPanel>
 
             <Button Style="{StaticResource MajorButton}" Content="Start" Click="BtnStart_Click" Name="StartBtn" Visibility="Collapsed"/>
