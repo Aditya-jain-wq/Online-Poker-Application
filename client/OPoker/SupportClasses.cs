@@ -22,11 +22,15 @@ namespace OPoker {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
         }
 
-        internal void JoinRoom(string room_id) {
+        internal Room JoinRoom(string username, string room_id) {
             throw new NotImplementedException();
         }
 
-        internal void CreateRoom() {
+        internal Room CreateRoom(string username) {
+            throw new NotImplementedException();
+        }
+
+        internal void Start() {
             throw new NotImplementedException();
         }
     }
@@ -44,8 +48,8 @@ namespace OPoker {
         private int _pot_amt;
 
         public int pot_amt {
-            get => return _pot_amt;
-            set { _pot_amt = value; OnPropertyChanged(pot_amt); }
+            get => _pot_amt;
+            set { _pot_amt = value; OnPropertyChanged("pot_amt"); }
         }
 
         public string[] dealer_cards;
@@ -79,16 +83,16 @@ namespace OPoker {
         
         public string username{
             get { return _username; }
-            set { _username = value; OnPropertyChanged("username")}
-        };
+            set { _username = value; OnPropertyChanged("username"); }
+        }
         public int rem_money{
             get { return _rem_money; }
-            set { _rem_money = value; OnPropertyChanged("rem_money")}
-        };
+            set { _rem_money = value; OnPropertyChanged("rem_money"); }
+        }
         public int pot_contrib{
             get { return _pot_contrib; }
-            set { _pot_contrib = value; OnPropertyChanged("pot_contrib")}
-        };
+            set { _pot_contrib = value; OnPropertyChanged("pot_contrib"); }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

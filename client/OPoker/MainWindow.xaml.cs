@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace OPoker {
     /// <summary>
@@ -70,16 +71,16 @@ namespace OPoker {
         }
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e) {
-            if(String.IsNullorEmpty(UsernameInput.Text)) {
+            if(string.IsNullOrEmpty(UsernameInput.Text)) {
                 Username.Text = "User Name is Empty. Enter your User Name below";
             }
-            else if(String.IsNullorEmpty(RoomidInput.Text)) {
+            else if(string.IsNullOrEmpty(RoomidInput.Text)) {
                 RoomBlock.Text = "Room ID is Empty. Enter the Room ID below";
             }
             else {
                 username = UsernameInput.Text;
                 room_id = RoomidInput.Text;
-                MyRoom = Client.JoinRoom(username, room_id)
+                MyRoom = Client.JoinRoom(username, room_id);
                 if( MyRoom is null ) {
                     RoomBlock.Text = "Room ID is not valid. Enter the valid Room ID below";
                 }
@@ -92,7 +93,7 @@ namespace OPoker {
         }
 
         private void BtnCreate_Click(object sender, RoutedEventArgs e) {
-            if(String.IsNullorEmpty(UsernameInput.Text)) {
+            if(string.IsNullOrEmpty(UsernameInput.Text)) {
                 Username.Text = "User Name is Empty. Enter your User Name below";
             }
             else {

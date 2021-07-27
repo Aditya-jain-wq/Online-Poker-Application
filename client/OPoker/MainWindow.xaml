@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OPoker"
         mc:Ignorable="d"
-        Title="Online Poker" Height="600" Width="800" Background="#FF14181F" WindowState="Maximized"
+        Title="Online Poker" Height="800" Width="1400" Background="#FF14181F" WindowState="Maximized"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Window.Resources>
@@ -22,49 +22,67 @@
             <Setter Property="FontSize" Value="26"/>
             <Setter Property="Margin" Value="150 20"/>
         </Style>
+        <Style x:Key="Card" TargetType="Grid">
+            <Setter Property="Background" Value="Red"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Width" Value="41"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
     </Window.Resources>
 
     <Grid>
-        <Grid.ColumnDefinations>
-            <ColumnDefination Width="Auto"/>
-            <ColumnDefination Width="Auto"/>
-        </Grid.ColumnDefinations>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
 
         <TextBlock Text="Online Poker" VerticalAlignment="Top" HorizontalAlignment="Center" Height="100" Width="450" Grid.ColumnSpan="2" Style="{StaticResource MainTitle}"/>
         <Grid Name="MainView" Visibility="Visible" Height="Auto" Width="Auto" Grid.Column="0" Margin="0 100 0 0">
             <StackPanel>
             
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Grid Name="pl1" Margin="20">
-                        <TextBlock >
+                    <StackPanel Name="pl1" Margin="20">
+                        <TextBlock Foreground="White">
                             <Run Text="Your contrib $"/><Run Text="{Binding MyRoom.Player1.pot_contrib}"/>
                         </TextBlock>
-                        <Grid Background="Red" Height="240" Width="166" Margin="5">
-                            <Image Name="Player1Card1" Stretch="None"/>
-                        </Grid>
-                        <Grid Background="Red" Height="240" Width="166" Margin="5">
-                            <Image Name="Player1Card2" Stretch="None"/>
-                        </Grid>
-                        <TextBlock Text="{Binding MyRoom.Player1.username}"/>
-                        <TextBlock >
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player1Card1" Stretch="None"/>
+                            </Grid>
+                            <Grid Style="{StaticResource Card}">
+                                <Image Name="Player1Card2" Stretch="None"/>
+                            </Grid>
+                        </StackPanel>
+                        <TextBlock Text="{Binding MyRoom.Player1.username}" Foreground="White"/>
+                        <TextBlock Foreground="White">
                             <Run Text="Left with you $"/><Run Text="{Binding MyRoom.Player1.rem_money}"/>
                         </TextBlock>
-                    </Grid>
+                    </StackPanel>
                     <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player1.username}"/>
                     <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player2.username}"/>
                     <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player3.username}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player4.username}"/>
-                    <Grid Name="Table" Margin="100" Height="200" Width="350">
+                    <Grid Name="Table" Margin="100" MaxHeight="200" MaxWidth="350">
                         <StackPanel>
                             <TextBlock Text="Pot: $0" Margin="10" HorizontalAlignment="Center"/>
                             <StackPanel Orientation="Horizontal">
-                                <Image Margin="10, 10" Source="{Binding Card1}"/>
-                                <Image Margin="10, 10" Source="{Binding Card2}"/>
-                                <Image Margin="10, 10" Source="{Binding Card3}"/>
-                                <Image Margin="10, 10" Source="{Binding Card4}"/>
-                                <Image Margin="10, 10" Source="{Binding Card5}"/>
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card1}"/>
+                                </Grid>
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card2}"/>
+                                </Grid>
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card3}"/>
+                                </Grid>
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card4}"/>
+                                </Grid>
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card5}"/>
+                                </Grid>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
@@ -85,31 +103,21 @@
 
         <Grid Name="ButtonOptions" Grid.Column="0" Margin="0 100 0 0" Visibility="Collapsed">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
-                <TextBlock Margin="5" Text="Please Enter your User Name and a valid Room ID on right-side before creating a room" FontWeight="Bold" FontFamily="Cambria" FontSize="26"/>
+                <TextBlock Margin="5" Text="Please Enter your User Name and a valid Room ID on right-side before creating a room" FontWeight="Bold" FontFamily="Cambria" FontSize="26" Foreground="#ddd"/>
                 <Button Style="{StaticResource MajorButton}" Content="Join" Click="BtnJoin_Click"/>
-                <TextBlock Margin="5" Text="Please Enter your User Name on right-side before joining a room" FontWeight="Bold" FontFamily="Cambria" FontSize="26"/>
+                <TextBlock Margin="5" Text="Please Enter your User Name on right-side before joining a room" FontWeight="Bold" FontFamily="Cambria" FontSize="26" Foreground="#ddd"/>
                 <Button Style="{StaticResource MajorButton}" Content="Create" Click="BtnCreate_Click"/>
             </StackPanel>
         </Grid>
 
         <!-- It's important that this is in the end of the XAML as it needs to be on top of everything else! -->
         <Grid Grid.Column="1" Margin="0 100 0 0">
-            <Grid Background="Black" Opacity="0.5"/>
-            <Border
-            MinWidth="250"
-            Background="Orange" 
-            BorderBrush="Black" 
-            BorderThickness="1" 
-            CornerRadius="0,55,0,55" 
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Center">
-                <StackPanel>
-                    <TextBlock x:Name="Username" Margin="5" Text="Enter your User Name below" FontWeight="Bold" FontFamily="Cambria" FontSize="26"/>
-                    <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" Name="UsernameInput" FontSize="28"/>
-                    <TextBlock x:Name="RoomBlock" Margin="5" Text="Enter the Room ID below" FontWeight="Bold" FontFamily="Cambria" FontSize="26"/>
-                    <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" Name="RoomidInput" FontSize="28"/>
-                </StackPanel>
-            </Border>
+            <StackPanel>
+                <TextBlock x:Name="Username" Margin="5" Text="Enter your User Name below" FontWeight="Bold" FontFamily="Cambria" FontSize="26" Foreground="#ddd"/>
+                <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" Name="UsernameInput" FontSize="28"/>
+                <TextBlock x:Name="RoomBlock" Margin="5" Text="Enter the Room ID below" FontWeight="Bold" FontFamily="Cambria" FontSize="26" Foreground="#ddd"/>
+                <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" Name="RoomidInput" FontSize="28"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
