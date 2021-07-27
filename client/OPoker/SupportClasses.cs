@@ -71,8 +71,8 @@ namespace OPoker {
     public class Player : INotifyPropertyChanged {
         private string _username;
         private int _rem_money; // remaining money
+        private int _pot_contrib;
 
-        public int pot_contrib;
         public string[] cards;
         public bool is_live;
         public bool is_turn_now;
@@ -84,6 +84,10 @@ namespace OPoker {
         public int rem_money{
             get { return _rem_money; }
             set { _rem_money = value; OnPropertyChanged("rem_money")}
+        };
+        public int pot_contrib{
+            get { return _pot_contrib; }
+            set { _pot_contrib = value; OnPropertyChanged("pot_contrib")}
         };
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -60,6 +60,7 @@ namespace OPoker {
             get => _Card5;
             set { _Card5 = value; OnPropertyChanged("Card5"); }
         }
+        public int PlayerNo { get; set; }
 
 
         public MainWindow() {
@@ -84,6 +85,7 @@ namespace OPoker {
                 }
                 else{
                     ButtonOptions.Visibility = Visibility.Collapsed;
+                    RoomBlock.Text = "Your shareable Room ID is";
                     MainView.Visibility = Visibility.Visible;
                 }
             }
@@ -105,10 +107,16 @@ namespace OPoker {
                     RoomidInput.Text = room_id;
                     ButtonOptions.Visibility = Visibility.Collapsed;
                     MainView.Visibility = Visibility.Visible;
+                    StartBtn.Visibility = Visibility.Visible;
+                    PlayerNo = 1;
                 }
             }
         }
         
+        private void BtnStart_Click(object sender, RoutedEventArgs e) {
+            Client.Start();
+        }
+
         public void OnRoomUpdate(Room room) {
             MyRoom = room;
         }

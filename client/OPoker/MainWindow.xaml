@@ -31,9 +31,25 @@
         </Grid.ColumnDefinations>
 
         <TextBlock Text="Online Poker" VerticalAlignment="Top" HorizontalAlignment="Center" Height="100" Width="450" Grid.ColumnSpan="2" Style="{StaticResource MainTitle}"/>
-        <Grid Name="MainView" Visibility="Collapsed" Height="Auto" Width="Auto" Grid.Column="0" Margin="0 100 0 0">
+        <Grid Name="MainView" Visibility="Visible" Height="Auto" Width="Auto" Grid.Column="0" Margin="0 100 0 0">
             <StackPanel>
+            
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Grid Name="pl1" Margin="20">
+                        <TextBlock >
+                            <Run Text="Your contrib $"/><Run Text="{Binding MyRoom.Player1.pot_contrib}"/>
+                        </TextBlock>
+                        <Grid Background="Red" Height="240" Width="166" Margin="5">
+                            <Image Name="Player1Card1" Stretch="None"/>
+                        </Grid>
+                        <Grid Background="Red" Height="240" Width="166" Margin="5">
+                            <Image Name="Player1Card2" Stretch="None"/>
+                        </Grid>
+                        <TextBlock Text="{Binding MyRoom.Player1.username}"/>
+                        <TextBlock >
+                            <Run Text="Left with you $"/><Run Text="{Binding MyRoom.Player1.rem_money}"/>
+                        </TextBlock>
+                    </Grid>
                     <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player1.username}"/>
                     <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player2.username}"/>
                     <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player3.username}"/>
@@ -59,11 +75,15 @@
                     <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player7.username}"/>
                     <TextBox Margin="20" Height="20" Width="175" Text="{Binding MyRoom.Player8.username}"/>
                 </StackPanel>
+            
             </StackPanel>
+
+            <Button Style="{StaticResource MajorButton}" Content="Start" Click="BtnStart_Click" Name="StartBtn" Visibility="Collapsed"/>
+
         </Grid>
 
 
-        <Grid Name="ButtonOptions" Grid.Column="0" Margin="0 100 0 0">
+        <Grid Name="ButtonOptions" Grid.Column="0" Margin="0 100 0 0" Visibility="Collapsed">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Stretch">
                 <TextBlock Margin="5" Text="Please Enter your User Name and a valid Room ID on right-side before creating a room" FontWeight="Bold" FontFamily="Cambria" FontSize="26"/>
                 <Button Style="{StaticResource MajorButton}" Content="Join" Click="BtnJoin_Click"/>
