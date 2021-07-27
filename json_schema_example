@@ -26,10 +26,17 @@
     "amt": 567,
   }
 }
-
+// lets remove this payload and keep every class different and specific to kind?
+// would be easier to serialize and deserialize
 {
   "kind": "CREATE",
   "username": "kda",
   "room": "",
+  "payload": {}
+}
+{
+  "kind": "START",
+  "username": "qwer", // would be player1 always(basically who created game)
+  "room": "ACF278",
   "payload": {}
 }

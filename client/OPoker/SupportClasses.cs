@@ -16,21 +16,45 @@ using System.ComponentModel;
 
 namespace OPoker {
     public class MyTcpClient : INotifyPropertyChanged {
+        private string serverip = "";
+        private int port = 12345;
+        public TcpClient tcpClient;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyname) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
         }
 
-        internal Room JoinRoom(string username, string room_id) {
+        public void Connect(){
+            TcpClient tcpClient = new TcpClient(serverip, port);
+        }
+        
+        public void sendMsg(Byte[] msg){
+            using(NetworkStream stream = tcpClient.GetStream){
+                stream.Write(msg, 0, msg.Length);
+            }
+        }
+
+        public string rcvMsg(){
+            Byte[] msg = new Byte[2048];
+            int bytes;
+            using(NetworkStream stream = tcpClient.GetStream){
+                bytes = stream.Read(msg, 0, msg.Length);
+            }
+            string received = System.Text.Encoding.ASCII.GetString(msg, 0, bytes);
+            return received;
+        }
+
+        public Room JoinRoom(string username, string room_id) {
             throw new NotImplementedException();
         }
 
-        internal Room CreateRoom(string username) {
+        public Room CreateRoom(string username) {
             throw new NotImplementedException();
         }
 
-        internal void Start() {
+        public void Start() {
             throw new NotImplementedException();
         }
     }
@@ -96,7 +120,12 @@ namespace OPoker {
 
     public class Command {
         public string kind;
-        
+        public string username;
+        public string room;
+    }
+
+    public class RaiseCmd : Command {
+        public int amt;
     }
     
 }
