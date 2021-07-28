@@ -1,7 +1,7 @@
 {
   "room_id": "ABD345",
   "pot_amt": 100,
-  "dealer_cards": [ "D4", "H6", "CJ", "", "" ],
+  "dealer_cards": [ "D4", "H6", "CJ", "XX", "XX" ],
   "winner": "",
   "players": [
     {
@@ -27,10 +27,17 @@
     "amt": 567,
   }
 }
-
+// lets remove this payload and keep every class different and specific to kind?
+// would be easier to serialize and deserialize
 {
   "kind": "CREATE",
   "username": "kda",
   "room": "",
+  "payload": {}
+}
+{
+  "kind": "START",
+  "username": "qwer", // would be player1 always(basically who created game)
+  "room": "ACF278",
   "payload": {}
 }

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace OPoker {
     /// <summary>
@@ -22,11 +23,6 @@ namespace OPoker {
 
         private MyTcpClient Client;
         private Room _MyRoom;
-        private Image _Card1;
-        private Image _Card2;
-        private Image _Card3;
-        private Image _Card4;
-        private Image _Card5;
         private string username = "";
         private string room_id = "";
 
@@ -60,6 +56,8 @@ namespace OPoker {
             get => _Card5;
             set { _Card5 = value; OnPropertyChanged("Card5"); }
         }
+        public ObservableCollection<Image> Cards
+        public int PlayerNo { get; set; }
 
 
         public MainWindow() {
@@ -69,28 +67,29 @@ namespace OPoker {
         }
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e) {
-            if(String.IsNullorEmpty(UsernameInput.Text)) {
+            if(string.IsNullOrEmpty(UsernameInput.Text)) {
                 Username.Text = "User Name is Empty. Enter your User Name below";
             }
-            else if(String.IsNullorEmpty(RoomidInput.Text)) {
+            else if(string.IsNullOrEmpty(RoomidInput.Text)) {
                 RoomBlock.Text = "Room ID is Empty. Enter the Room ID below";
             }
             else {
                 username = UsernameInput.Text;
                 room_id = RoomidInput.Text;
-                MyRoom = Client.JoinRoom(username, room_id)
+                MyRoom = Client.JoinRoom(username, room_id);
                 if( MyRoom is null ) {
                     RoomBlock.Text = "Room ID is not valid. Enter the valid Room ID below";
                 }
                 else{
                     ButtonOptions.Visibility = Visibility.Collapsed;
+                    RoomBlock.Text = "Your shareable Room ID is";
                     MainView.Visibility = Visibility.Visible;
                 }
             }
         }
 
         private void BtnCreate_Click(object sender, RoutedEventArgs e) {
-            if(String.IsNullorEmpty(UsernameInput.Text)) {
+            if(string.IsNullOrEmpty(UsernameInput.Text)) {
                 Username.Text = "User Name is Empty. Enter your User Name below";
             }
             else {
@@ -105,10 +104,16 @@ namespace OPoker {
                     RoomidInput.Text = room_id;
                     ButtonOptions.Visibility = Visibility.Collapsed;
                     MainView.Visibility = Visibility.Visible;
+                    StartBtn.Visibility = Visibility.Visible;
+                    PlayerNo = 1;
                 }
             }
         }
         
+        private void BtnStart_Click(object sender, RoutedEventArgs e) {
+            Client.Start();
+        }
+
         public void OnRoomUpdate(Room room) {
             MyRoom = room;
         }

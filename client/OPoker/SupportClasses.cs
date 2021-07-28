@@ -16,39 +16,63 @@ using System.ComponentModel;
 
 namespace OPoker {
     public class MyTcpClient : INotifyPropertyChanged {
+        private string serverip = "";
+        private int port = 12345;
+        public TcpClient tcpClient;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyname) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
         }
 
-        internal void JoinRoom(string room_id) {
+        public void Connect(){
+            TcpClient tcpClient = new TcpClient(serverip, port);
+        }
+        
+        public void sendMsg(Byte[] msg){
+            using(NetworkStream stream = tcpClient.GetStream){
+                stream.Write(msg, 0, msg.Length);
+            }
+        }
+
+        public string rcvMsg(){
+            Byte[] msg = new Byte[2048];
+            int bytes;
+            using(NetworkStream stream = tcpClient.GetStream){
+                bytes = stream.Read(msg, 0, msg.Length);
+            }
+            string received = System.Text.Encoding.ASCII.GetString(msg, 0, bytes);
+            return received;
+        }
+
+        public Room JoinRoom(string username, string room_id) {
             throw new NotImplementedException();
         }
 
-        internal void CreateRoom() {
+        public Room CreateRoom(string username) {
+            throw new NotImplementedException();
+        }
+
+        public void Start() {
             throw new NotImplementedException();
         }
     }
 
     public class Room : INotifyPropertyChanged {
-        public string room_id;
-        public Player Player1;
-        public Player Player2;
-        public Player Player3;
-        public Player Player4;
-        public Player Player5;
-        public Player Player6;
-        public Player Player7;
-        public Player Player8;
+        private string _room_id;
         private int _pot_amt;
 
-        public int pot_amt {
-            get => return _pot_amt;
-            set { _pot_amt = value; OnPropertyChanged(pot_amt); }
+        public string room_id { 
+            get => _room_id;
+            set { _room_id = value; OnPropertyChanged("room_id"); } 
         }
-
-        public string[] dealer_cards;
+        public int pot_amt {
+            get => _pot_amt;
+            set { _pot_amt = value; OnPropertyChanged("pot_amt"); }
+        }
+        public Player[] Players { get; set; } = new Player[8];
+        public string[] dealer_cards { get; set; } = new string[5];
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyname) {
@@ -57,34 +81,31 @@ namespace OPoker {
 
         public Room() {
             room_id = "";
-            Player1 = null;
-            Player2 = null;
-            Player3 = null;
-            Player4 = null;
-            Player5 = null;
-            Player6 = null;
-            Player7 = null;
-            Player8 = null;
+            Pla
         }
     }
     
     public class Player : INotifyPropertyChanged {
         private string _username;
-        private int _rem_money; // remaining money
+        private int _pot_contrib;
+        private int _total_money; // remaining money
 
-        public int pot_contrib;
-        public string[] cards;
-        public bool is_live;
-        public bool is_turn_now;
         
         public string username{
             get { return _username; }
-            set { _username = value; OnPropertyChanged("username")}
-        };
-        public int rem_money{
-            get { return _rem_money; }
-            set { _rem_money = value; OnPropertyChanged("rem_money")}
-        };
+            set { _username = value; OnPropertyChanged("username"); }
+        }
+        public int total_money{
+            get { return _total_money; }
+            set { _total_money = value; OnPropertyChanged("total_money"); }
+        }
+        public int pot_contrib{
+            get { return _pot_contrib; }
+            set { _pot_contrib = value; OnPropertyChanged("pot_contrib"); }
+        }
+        public string[] cards { get; set; } = new string[2];
+        public bool is_live { get; set; }
+        public bool is_turn_now { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -99,7 +120,12 @@ namespace OPoker {
 
     public class Command {
         public string kind;
-        
+        public string username;
+        public string room;
+    }
+
+    public class RaiseCmd : Command {
+        public int amt;
     }
     
 }
