@@ -61,12 +61,13 @@ class PokerServer:
                 "FOLD": FoldCmd,
             }[kind]
             cmd = cmd(**payload)
-            self.rooms[room_id].update(cmd, username)
             room = self.rooms[room_id]
+            room.update(cmd, username)
         for pl in room.players:
             pl.send(room)
         if room.winner != "":
             for pl in room.players:
+                self.sel.unregister(pl.conn)
                 pl.conn.close()
                 del self.players[pl.conn]
             del self.rooms[room_id]
