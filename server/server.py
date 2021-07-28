@@ -2,7 +2,6 @@ import random
 import socket
 import selectors
 import json
-from typing import Dict
 
 from commands import *
 from room import Room, MAX_PLAYERS_IN_GAME as MPIG
