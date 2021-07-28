@@ -14,7 +14,6 @@ class Player:
     money: int
     put_in_pot: int = 0
     is_live: bool = True
-    last_bet: Optional[int] = None
     cards: List[str] = field(default_factory=list)
 
     def send(self, room: "Room"):
@@ -82,6 +81,7 @@ class Room:
     pot: int = 0
     is_started: bool = False
     card_deck: CardDeck = field(default_factory=CardDeck)
+    bets_this_round: int = 0
 
     @property
     def live_players(self):
@@ -104,14 +104,37 @@ class Room:
         while not self.players[self.player_this_turn].is_live:
             self.player_this_turn = (self.player_this_turn + 1) % len(self.players)
 
-    ## TODO:
-    ## 1. set bet_amt to None
-    ## 2. choose new card
-    ## 3. set next player to first live
     def play_dealer(self):
-        pass
+        self.bets_this_round = 0
+        if len(self.dealer_cards) == 0:
+            self.dealer_cards = [
+                self.card_deck.get_new_card(),
+                self.card_deck.get_new_card(),
+                self.card_deck.get_new_card(),
+            ]
+        else:
+            self.dealer_cards.append(self.card_deck.get_new_card())
+        self.player_this_turn = 0
+        while not self.players[self.player_this_turn].is_live:
+            self.player_this_turn = (self.player_this_turn + 1) % len(self.players)
 
     def update(self, cmd: Command, username: str):
         assert self.players[self.player_this_turn].username == username
         cmd.update(self, username)
         self.next_player()
+        if self.live_players == 1:
+            # second last player folded
+            live_player = self.players[self.player_this_turn]
+            self.winner = live_player.username
+        elif self.bets_this_round >= self.live_players and all(
+            pl.put_in_pot == self.players[self.player_this_turn].put_in_pot
+            for pl in self.players
+            if pl.is_live
+        ):
+            # betting round has ended
+            if len(self.dealer_cards) < 5:
+                self.play_dealer()
+            else:
+                # game ended
+                ## TODO: calculate scores and find winner
+                self.winner = self.players[self.player_this_turn].username
