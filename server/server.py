@@ -1,3 +1,4 @@
+import random
 import socket
 import selectors
 import json
@@ -9,7 +10,10 @@ from room import Room, MAX_PLAYERS_IN_GAME as MPIG
 
 def get_random_room(rooms) -> str:
     """Return a room id that is not present in rooms"""
-    pass
+    new_id = random.randbytes(12).hex().upper()
+    while new_id in rooms:
+        new_id = random.randbytes(12).hex().upper()
+    return new_id
 
 
 class PokerServer:
@@ -72,6 +76,7 @@ class PokerServer:
             self._handle(conn)
         except Exception as e:
             ## TODO: return an error message based on the exception
+            print(e)
             conn.send(e)
 
     def serve(self):
