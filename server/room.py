@@ -23,7 +23,7 @@ class Player:
         data = {
             "room_id": room.id_,
             "pot_amt": room.pot,
-            "dealer_cards": [*islice(chain(room.dealer_cards, repeat("")), 5)],
+            "dealer_cards": [*islice(chain(room.dealer_cards, repeat("XX")), 5)],
             "winner": room.winner,
             "players": [
                 {
@@ -93,6 +93,11 @@ class Room:
         assert len(pl for pl in self.players if pl.username == username) == 0
         player = Player(conn, username, self.default_amt)
         self.players.append(player)
+
+    def get_player(self, username: str) -> Player:
+        for pl in self.players:
+            if pl.username == username:
+                return pl
 
     def next_player(self):
         self.player_this_turn = (self.player_this_turn + 1) % len(self.players)
