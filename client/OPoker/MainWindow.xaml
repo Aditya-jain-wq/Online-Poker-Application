@@ -115,20 +115,23 @@
                             <TextBlock Margin="10" HorizontalAlignment="Center">
                                 <Run Text="Pot: $"/><Run Text="{Binding MyRoom.pot_amt}"/>
                             </TextBlock>
-                            <ItemControl>
-                                <ItemControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemControl.ItemsPanel>
-                                <ItemControl.ItemsTemplate>
-                                    <DataTemplate>
-                                        <Grid Style="{StaticResource Card}">
-                                            <Image Margin="10, 10" Source="{Binding}"/>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemControl.ItemsTemplate>
-                            </ItemControl>
+                            <StackPanel Orientation="Horizontal">
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card1}"/>
+                                </Grid>
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card2}"/>
+                                </Grid>
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card3}"/>
+                                </Grid>
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card4}"/>
+                                </Grid>
+                                <Grid Style="{StaticResource Card}">
+                                    <Image Margin="10, 10" Source="{Binding Card5}"/>
+                                </Grid>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                     <StackPanel Name="pl5" Margin="20">

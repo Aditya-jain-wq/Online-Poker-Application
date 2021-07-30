@@ -47,15 +47,34 @@ namespace OPoker {
         }
 
         public Room JoinRoom(string username, string room_id) {
-            throw new NotImplementedException();
+            Command join = new Command;
+            start.kind = "JOIN";
+            start.username = username;
+            start.room = room_id;
+            byte[] msg = JsonSerializer.SerializeToUtf8Bytes(join);
+            send(msg);
+            Room myroom = JsonSerializer.Deserialize<Room>(rcvMsg());
+            return myroom;
         }
 
         public Room CreateRoom(string username) {
-            throw new NotImplementedException();
+            Command create = new Command;
+            start.kind = "CREATE";
+            start.username = username;
+            start.room = "";
+            byte[] msg = JsonSerializer.SerializeToUtf8Bytes(create);
+            send(msg);
+            Room myroom = JsonSerializer.Deserialize<Room>(rcvMsg());
+            return myroom;
         }
 
-        public void Start() {
-            throw new NotImplementedException();
+        public void Start(string username, string room_id) {
+            Command start = new Command;
+            start.kind = "START";
+            start.username = username;
+            start.room = room_id;
+            byte[] msg = JsonSerializer.SerializeToUtf8Bytes(start);
+            send(msg);
         }
     }
 
@@ -73,6 +92,7 @@ namespace OPoker {
         }
         public Player[] Players { get; set; } = new Player[8];
         public string[] dealer_cards { get; set; } = new string[5];
+        public string winner { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyname) {
@@ -81,7 +101,6 @@ namespace OPoker {
 
         public Room() {
             room_id = "";
-            Pla
         }
     }
     
@@ -106,7 +125,7 @@ namespace OPoker {
         public string[] cards { get; set; } = new string[2];
         public bool is_live { get; set; }
         public bool is_turn_now { get; set; }
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyname) {

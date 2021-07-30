@@ -56,7 +56,6 @@ namespace OPoker {
             get => _Card5;
             set { _Card5 = value; OnPropertyChanged("Card5"); }
         }
-        public ObservableCollection<Image> Cards
         public int PlayerNo { get; set; }
 
 
@@ -111,7 +110,7 @@ namespace OPoker {
         }
         
         private void BtnStart_Click(object sender, RoutedEventArgs e) {
-            Client.Start();
+            Client.Start(username, room_id);
         }
 
         public void OnRoomUpdate(Room room) {

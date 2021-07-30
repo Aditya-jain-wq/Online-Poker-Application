@@ -37,7 +37,7 @@
 }
 {
   "kind": "START",
-  "username": "qwer", // would be player1 always(basically who created game)
+  "username": "qwer", // would be player1 always(basically who created room)
   "room": "ACF278",
   "payload": {}
 }
