@@ -205,9 +205,14 @@
                         </TextBlock>
                     </StackPanel>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="Actions" Visibility="Collapsed">
+                    <Button Style="{StaticResource MajorButton}" Content="Start" Click="BtnStart_Click" Name="StartBtn"/>
+                    <Button Style="{StaticResource MajorButton}" Content="Raise" Click="BtnRaise_Click" Name="RaiseBtn"/>
+                    <TextBox Text="0" MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" Name="RaisedValue" FontSize="28" PreviewTextInput="PreviewTextInput"/>
+                    <Button Style="{StaticResource MajorButton}" Content="Fold" Click="BtnFold_Click" Name="FoldBtn"/>
+                </StackPanel>
             </StackPanel>
 
-            <Button Style="{StaticResource MajorButton}" Content="Start" Click="BtnStart_Click" Name="StartBtn" Visibility="Collapsed"/>
 
         </Grid>
 

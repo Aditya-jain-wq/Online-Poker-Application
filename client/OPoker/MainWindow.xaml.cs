@@ -83,6 +83,7 @@ namespace OPoker {
                     ButtonOptions.Visibility = Visibility.Collapsed;
                     RoomBlock.Text = "Your shareable Room ID is";
                     MainView.Visibility = Visibility.Visible;
+                    listenSocket()
                 }
             }
         }
@@ -105,16 +106,52 @@ namespace OPoker {
                     MainView.Visibility = Visibility.Visible;
                     StartBtn.Visibility = Visibility.Visible;
                     PlayerNo = 1;
+                    listenSocket();
                 }
             }
         }
         
+        private void listenSocket(){
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += (sender, args) => {
+                UpdateRoom(rcvMsg());
+            }
+
+        }
+        public void UpdateRoom(Room room) {
+            MyRoom = room;
+            // update cards on table
+            Trace.WriteLine("Received room:" + MyRoom);
+        }
+
         private void BtnStart_Click(object sender, RoutedEventArgs e) {
             Client.Start(username, room_id);
         }
 
-        public void OnRoomUpdate(Room room) {
-            MyRoom = room;
+        private void BtnRaise_Click(object sender, RoutedEventArgs e) {
+            if(!string.IsNullOrEmpty(RaisedValue.Text)){
+                RaiseCmd bet = new RaiseCmd();
+                bet.username = username;
+                bet.room = room_id;
+                bet.amt = int.Parse(RaisedValue.Text);
+                byte[] msg = JsonSerializer.SerializeToUtf8Bytes(bet);
+                send(msg);
+            }
         }
+
+        private void BtnFold_Click(object sender, RoutedEventArgs e) {
+            Command fold = new Command();
+            fold.kind = "FOLD";
+            fold.username = username;
+            fold.room = room_id;
+            byte[] msg = JsonSerializer.SerializeToUtf8Bytes(fold);
+            send(msg);
+        }
+
+        private void PreviewTextInput(object sender, TextCompositionEventArgs e) {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
     }
 }

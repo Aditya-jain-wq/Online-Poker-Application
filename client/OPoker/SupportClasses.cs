@@ -36,40 +36,38 @@ namespace OPoker {
             }
         }
 
-        public string rcvMsg(){
+        public Room rcvMsg(){
             Byte[] msg = new Byte[2048];
             int bytes;
             using(NetworkStream stream = tcpClient.GetStream){
                 bytes = stream.Read(msg, 0, msg.Length);
             }
             string received = System.Text.Encoding.ASCII.GetString(msg, 0, bytes);
-            return received;
+            return JsonSerializer.Deserialize<Room>(received);
         }
 
         public Room JoinRoom(string username, string room_id) {
-            Command join = new Command;
+            Command join = new Command();
             start.kind = "JOIN";
             start.username = username;
             start.room = room_id;
             byte[] msg = JsonSerializer.SerializeToUtf8Bytes(join);
             send(msg);
-            Room myroom = JsonSerializer.Deserialize<Room>(rcvMsg());
-            return myroom;
+            return rcvMsg();
         }
 
         public Room CreateRoom(string username) {
-            Command create = new Command;
+            Command create = new Command();
             start.kind = "CREATE";
             start.username = username;
             start.room = "";
             byte[] msg = JsonSerializer.SerializeToUtf8Bytes(create);
             send(msg);
-            Room myroom = JsonSerializer.Deserialize<Room>(rcvMsg());
-            return myroom;
+            return rcvMsg();
         }
 
         public void Start(string username, string room_id) {
-            Command start = new Command;
+            Command start = new Command();
             start.kind = "START";
             start.username = username;
             start.room = room_id;
@@ -145,6 +143,9 @@ namespace OPoker {
 
     public class RaiseCmd : Command {
         public int amt;
+        public RaiseCmd(){
+            kind = "BET";
+        }
     }
     
 }
