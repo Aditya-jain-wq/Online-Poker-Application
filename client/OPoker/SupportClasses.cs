@@ -13,66 +13,73 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
+using System.Net.Sockets;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Diagnostics;
 
 namespace OPoker {
     public class MyTcpClient : INotifyPropertyChanged {
-        private string serverip = "";
-        private int port = 12345;
+        private readonly string serverip = "127.0.0.1";
+        private readonly int port = 12345;
         public TcpClient tcpClient;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string propertyname) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+        public void Connect() {
+            tcpClient = new TcpClient(serverip, port);
         }
 
-        public void Connect(){
-            TcpClient tcpClient = new TcpClient(serverip, port);
-        }
-        
-        public void sendMsg(Byte[] msg){
-            using(NetworkStream stream = tcpClient.GetStream){
+        public void SendMsg(byte[] msg) {
+            Trace.WriteLine("MSG" + msg);
+            using (var stream = tcpClient.GetStream()) {
                 stream.Write(msg, 0, msg.Length);
             }
         }
 
-        public Room rcvMsg(){
-            Byte[] msg = new Byte[2048];
+        public Room RcvMsg() {
+            byte[] msg = new byte[2048];
             int bytes;
-            using(NetworkStream stream = tcpClient.GetStream){
+            using (var stream = tcpClient.GetStream()) {
                 bytes = stream.Read(msg, 0, msg.Length);
             }
-            string received = System.Text.Encoding.ASCII.GetString(msg, 0, bytes);
-            return JsonSerializer.Deserialize<Room>(received);
+            string received = Encoding.ASCII.GetString(msg, 0, bytes);
+            var options = new JsonSerializerOptions {
+                PropertyNameCaseInsensitive = true
+            };
+            return JsonSerializer.Deserialize<Room>(received, options);
         }
 
         public Room JoinRoom(string username, string room_id) {
-            Command join = new Command();
-            start.kind = "JOIN";
-            start.username = username;
-            start.room = room_id;
+            var join = new Command {
+                kind = "JOIN",
+                username = username,
+                room = room_id
+            };
             byte[] msg = JsonSerializer.SerializeToUtf8Bytes(join);
-            send(msg);
-            return rcvMsg();
+            SendMsg(msg);
+            return RcvMsg();
         }
 
         public Room CreateRoom(string username) {
-            Command create = new Command();
-            start.kind = "CREATE";
-            start.username = username;
-            start.room = "";
+            var create = new Command {
+                kind = "CREATE",
+                username = username,
+                room = ""
+            };
             byte[] msg = JsonSerializer.SerializeToUtf8Bytes(create);
-            send(msg);
-            return rcvMsg();
+            SendMsg(msg);
+            return RcvMsg();
         }
 
         public void Start(string username, string room_id) {
-            Command start = new Command();
-            start.kind = "START";
-            start.username = username;
-            start.room = room_id;
+            var start = new Command {
+                kind = "START",
+                username = username,
+                room = room_id
+            };
             byte[] msg = JsonSerializer.SerializeToUtf8Bytes(start);
-            send(msg);
+            SendMsg(msg);
         }
     }
 
@@ -80,17 +87,17 @@ namespace OPoker {
         private string _room_id;
         private int _pot_amt;
 
-        public string room_id { 
+        public string Room_id {
             get => _room_id;
-            set { _room_id = value; OnPropertyChanged("room_id"); } 
+            set { _room_id = value; OnPropertyChanged("room_id"); }
         }
-        public int pot_amt {
+        public int Pot_amt {
             get => _pot_amt;
             set { _pot_amt = value; OnPropertyChanged("pot_amt"); }
         }
         public Player[] Players { get; set; } = new Player[8];
-        public string[] dealer_cards { get; set; } = new string[5];
-        public string winner { get; set; }
+        public string[] Dealer_cards { get; set; } = new string[5];
+        public string Winner { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyname) {
@@ -98,54 +105,53 @@ namespace OPoker {
         }
 
         public Room() {
-            room_id = "";
+            Room_id = "";
         }
     }
-    
+
     public class Player : INotifyPropertyChanged {
         private string _username;
         private int _pot_contrib;
         private int _total_money; // remaining money
 
-        
-        public string username{
+
+        public string Username {
             get { return _username; }
             set { _username = value; OnPropertyChanged("username"); }
         }
-        public int total_money{
+        public int Total_money {
             get { return _total_money; }
             set { _total_money = value; OnPropertyChanged("total_money"); }
         }
-        public int pot_contrib{
+        public int Pot_contrib {
             get { return _pot_contrib; }
             set { _pot_contrib = value; OnPropertyChanged("pot_contrib"); }
         }
-        public string[] cards { get; set; } = new string[2];
-        public bool is_live { get; set; }
-        public bool is_turn_now { get; set; }
-        
+        public string[] Cards { get; set; } = new string[2];
+        public bool Is_live { get; set; }
+        public bool Is_turn_now { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string propertyname) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
         }
-        public Player(){
-            username = "";
-            rem_money = 100;
+        public Player() {
+            Username = "";
+            _total_money = 100;
         }
     }
 
     public class Command {
-        public string kind;
-        public string username;
-        public string room;
+        public string kind { get; set; }
+        public string username { get; set; }
+        public string room { get; set; }
     }
 
     public class RaiseCmd : Command {
-        public int amt;
-        public RaiseCmd(){
+        public int amt { get; set; }
+        public RaiseCmd() {
             kind = "BET";
         }
     }
-    
 }
