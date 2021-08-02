@@ -40,7 +40,7 @@ class Player:
         if room.is_started:
             data["players"][room.player_this_turn]["is_turn_now"] = True
         json_data = json.dumps(data)
-        self.conn.send(json_data)
+        self.conn.send(json_data.encode())
 
 
 class CardDeck:
@@ -85,12 +85,12 @@ class Room:
 
     @property
     def live_players(self):
-        return len(pl for pl in self.players if pl.is_live)
+        return len([pl for pl in self.players if pl.is_live])
 
     def add_player(self, conn: Any, username: str):
-        assert not self.started
+        assert not self.is_started
         assert len(self.players) < MAX_PLAYERS_IN_GAME
-        assert len(pl for pl in self.players if pl.username == username) == 0
+        assert len([pl for pl in self.players if pl.username == username]) == 0
         player = Player(conn, username, self.default_amt)
         self.players.append(player)
 

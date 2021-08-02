@@ -19,6 +19,7 @@ class PokerServer:
     def __init__(self, host: str, port: int):
         self.listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.listener.bind((host, port))
+        self.listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.listener.setblocking(False)
         self.listener.listen(10)
         self.sel = selectors.DefaultSelector()
@@ -33,11 +34,14 @@ class PokerServer:
 
     def _handle(self, conn):
         data = conn.recv(16192).strip()
+        if not data:
+            return
+        print(f"Received {data}")
         payload = json.loads(data)
+        print(f"Parsed {payload}")
         kind = payload["kind"]
         username = payload["username"]
         room_id = payload["room"]
-        payload = payload["payload"]
         room: Room
         if kind == "JOIN":
             assert self.players[conn] == ""
@@ -59,7 +63,10 @@ class PokerServer:
                 "BET": BetCmd,
                 "FOLD": FoldCmd,
             }[kind]
-            cmd = cmd(**payload)
+            if cmd == BetCmd:
+                cmd = cmd(payload["amt"])
+            else:
+                cmd = cmd()
             room = self.rooms[room_id]
             room.update(cmd, username)
         for pl in room.players:
@@ -73,11 +80,13 @@ class PokerServer:
 
     def handle(self, conn):
         try:
+            print(f"Trying {conn}")
             self._handle(conn)
+            print(f"Handled {conn}")
         except Exception as e:
             ## TODO: return an error message based on the exception
-            print(e)
-            conn.send(e)
+            print(f"{e}")
+            conn.send(f"{e}".encode())
 
     def serve(self):
         while True:
