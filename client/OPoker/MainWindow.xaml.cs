@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace OPoker {
     /// <summary>
@@ -21,10 +23,15 @@ namespace OPoker {
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged {
 
-        private MyTcpClient Client;
+        private readonly MyTcpClient Client;
         private Room _MyRoom;
         private string username = "";
         private string room_id = "";
+        private Image _Card1;
+        private Image _Card2;
+        private Image _Card3;
+        private Image _Card4;
+        private Image _Card5;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -61,62 +68,57 @@ namespace OPoker {
 
         public MainWindow() {
             Client = new MyTcpClient();
+            Client.Connect();
             MyRoom = new Room();
             InitializeComponent();
         }
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e) {
-            if(string.IsNullOrEmpty(UsernameInput.Text)) {
+            if (string.IsNullOrEmpty(UsernameInput.Text)) {
                 Username.Text = "User Name is Empty. Enter your User Name below";
-            }
-            else if(string.IsNullOrEmpty(RoomidInput.Text)) {
+            } else if (string.IsNullOrEmpty(RoomidInput.Text)) {
                 RoomBlock.Text = "Room ID is Empty. Enter the Room ID below";
-            }
-            else {
+            } else {
                 username = UsernameInput.Text;
                 room_id = RoomidInput.Text;
                 MyRoom = Client.JoinRoom(username, room_id);
-                if( MyRoom is null ) {
+                if (MyRoom is null) {
                     RoomBlock.Text = "Room ID is not valid. Enter the valid Room ID below";
-                }
-                else{
+                } else {
                     ButtonOptions.Visibility = Visibility.Collapsed;
                     RoomBlock.Text = "Your shareable Room ID is";
                     MainView.Visibility = Visibility.Visible;
-                    listenSocket()
+                    ListenSocket();
                 }
             }
         }
 
         private void BtnCreate_Click(object sender, RoutedEventArgs e) {
-            if(string.IsNullOrEmpty(UsernameInput.Text)) {
+            if (string.IsNullOrEmpty(UsernameInput.Text)) {
                 Username.Text = "User Name is Empty. Enter your User Name below";
-            }
-            else {
+            } else {
                 username = UsernameInput.Text;
                 MyRoom = Client.CreateRoom(username);
-                if( MyRoom is null ) {
+                if (MyRoom is null) {
                     Trace.WriteLine("MyRoom is Null, BtnCreate_Click.MainWindow");
-                }
-                else{
-                    room_id = MyRoom.room_id;
+                } else {
+                    room_id = MyRoom.Room_id;
                     RoomBlock.Text = "Your shareable Room ID is";
                     RoomidInput.Text = room_id;
                     ButtonOptions.Visibility = Visibility.Collapsed;
                     MainView.Visibility = Visibility.Visible;
                     StartBtn.Visibility = Visibility.Visible;
                     PlayerNo = 1;
-                    listenSocket();
+                    ListenSocket();
                 }
             }
         }
-        
-        private void listenSocket(){
-            BackgroundWorker bw = new BackgroundWorker();
-            bw.DoWork += (sender, args) => {
-                UpdateRoom(rcvMsg());
-            }
 
+        private void ListenSocket() {
+            var bw = new BackgroundWorker();
+            bw.DoWork += (sender, args) => {
+                UpdateRoom(Client.RcvMsg());
+            };
         }
         public void UpdateRoom(Room room) {
             MyRoom = room;
@@ -129,29 +131,27 @@ namespace OPoker {
         }
 
         private void BtnRaise_Click(object sender, RoutedEventArgs e) {
-            if(!string.IsNullOrEmpty(RaisedValue.Text)){
-                RaiseCmd bet = new RaiseCmd();
-                bet.username = username;
-                bet.room = room_id;
-                bet.amt = int.Parse(RaisedValue.Text);
-                byte[] msg = JsonSerializer.SerializeToUtf8Bytes(bet);
-                send(msg);
-            }
+            int amt;
+            try {
+                amt = int.Parse(RaisedValue.Text);
+            } catch (Exception) { return; }
+            var bet = new RaiseCmd {
+                username = username,
+                room = room_id,
+                amt = amt,
+            };
+            byte[] msg = JsonSerializer.SerializeToUtf8Bytes(bet);
+            Client.SendMsg(msg);
         }
 
         private void BtnFold_Click(object sender, RoutedEventArgs e) {
-            Command fold = new Command();
-            fold.kind = "FOLD";
-            fold.username = username;
-            fold.room = room_id;
+            var fold = new Command {
+                kind = "FOLD",
+                username = username,
+                room = room_id
+            };
             byte[] msg = JsonSerializer.SerializeToUtf8Bytes(fold);
-            send(msg);
+            Client.SendMsg(msg);
         }
-
-        private void PreviewTextInput(object sender, TextCompositionEventArgs e) {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
-
     }
 }
